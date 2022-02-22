@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import "./Tickets.css"
 
 export const TicketList = () => {
     const [tickets, updateTickets] = useState([])

@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export const TicketForm = () => {
+    
     const [ticket, update] = useState({
         description: "",
         emergency: false
@@ -9,9 +10,8 @@ export const TicketForm = () => {
 
     const history = useHistory()
 
-    const saveTicket = (event) => {
-        event.preventDefault()
-
+    const submitTicket = (evt) => {
+        evt.preventDefault()
         const newTicket = {
             description: ticket.description,
             emergency: ticket.emergency,
@@ -27,10 +27,10 @@ export const TicketForm = () => {
             },
             body: JSON.stringify(newTicket)
         }
-
+        
         return fetch("http://localhost:8088/serviceTickets", fetchOption)
         .then(() => {
-            history.push("/tickets")
+            history.push("/serviceTickets")
         })
     }
 
@@ -67,7 +67,7 @@ export const TicketForm = () => {
                         } />
                 </div>
             </fieldset>
-            <button className="btn btn-primary" onClick={saveTicket}>
+            <button className="btn btn-primary" onClick={submitTicket}>
                 Submit Ticket
             </button>
         </form>
