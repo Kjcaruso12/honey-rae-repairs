@@ -2,10 +2,7 @@ import React, { useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export const EmployeeForm = () => {
-    const [employee, update] = useState({
-        description: "",
-        specialty: ""
-    });
+    const [employees, update] = useState([]);
 
     const history = useHistory()
 
@@ -17,7 +14,7 @@ export const EmployeeForm = () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(employee)
+            body: JSON.stringify(employees)
         }
 
         return fetch("http://localhost:8088/employees", fetchOption)
@@ -39,7 +36,7 @@ export const EmployeeForm = () => {
                         placeholder="Name of employee"
                         onChange={
                             (evt) => {
-                                const copy = {...employee}
+                                const copy = {...employees}
                                 copy.name = evt.target.value
                                 update(copy)
                             }
@@ -55,7 +52,7 @@ export const EmployeeForm = () => {
                         placeholder="Technical specialty"
                         onChange={
                             (evt) => {
-                                const copy = {...employee}
+                                const copy = {...employees}
                                 copy.specialty = evt.target.value
                                 update(copy)
                             }

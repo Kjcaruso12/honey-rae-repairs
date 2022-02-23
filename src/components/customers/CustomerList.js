@@ -26,7 +26,7 @@ export const CustomerList = () => {
             {
                 customers.map(
                     (customerObject) => {
-                        return <p key={`customer--${customerObject.id}`}>{customerObject.name}</p>
+                        return <p key={`customer--${customerObject.id}`}>{customerObject.first_name} {customerObject.last_name}</p>
                     }
                 )
             }
