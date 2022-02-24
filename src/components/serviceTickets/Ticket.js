@@ -66,7 +66,7 @@ export const Ticket = () => {
                         value={ ticket.employeeId }
                         onChange={ assignEmployee }>
                         {
-                            employees.map(e => <option key={`employee--${e.id}`} value={e.id}>{e.first_name} {e.last_name}</option>)
+                            employees.map(employee => <option key={`employee--${employee.id}`} value={employee.id}>{employee.first_name} {employee.last_name}</option>)
                         }
                     </select>
                 </div>

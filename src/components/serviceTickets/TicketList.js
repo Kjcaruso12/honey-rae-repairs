@@ -5,9 +5,17 @@ import "./Tickets.css"
 
 export const TicketList = () => {
     const [tickets, updateTickets] = useState([])
-
     const history = useHistory()
-
+    const deleteTicket = (id) => {
+        fetch(`http://localhost:8088/serviceTickets/${id}`, {
+            method: "DELETE"
+        })
+        const copy = tickets.filter(ticket => {
+            return ticket.id != id
+        })
+        updateTickets(copy)
+        }      
+    
     useEffect(
         () => {
             fetch("http://localhost:8088/serviceTickets?_expand=employee&_expand=customer")
@@ -18,6 +26,8 @@ export const TicketList = () => {
         },
         []
     )
+
+
 
     return (
         <>
@@ -31,13 +41,16 @@ export const TicketList = () => {
                 tickets.map(
                     (ticket) => {
                         return <div key={`ticket--${ticket.id}`}>
-                                    <p className={ticket.emergency ? "emergency" : `ticket`}>
-                                        {ticket.emergency ? "🚑" : ""} 
-                                        <Link to={`./serviceTickets/${ticket.id}`}>{ticket.description}</Link> submitted by {ticket.customer.first_name} {ticket.customer.last_name} 
-                                        and worked on by {ticket.employee.first_name} {ticket.employee.last_name}
-                                    </p>
-                                </div>
-                        
+                            <p className={ticket.emergency ? "emergency" : `ticket`}>
+                                {ticket.emergency ? "🚑" : ""}
+                                <Link to={`./serviceTickets/${ticket.id}`}>{ticket.description}</Link> submitted by {ticket.customer.first_name} {ticket.customer.last_name}
+                                and worked on by {ticket.employee.first_name} {ticket.employee.last_name}
+                                <button onClick={() => {
+                                deleteTicket(ticket.id)
+                            }}>Delete</button>
+                            </p>
+                        </div>
+
                     }
                 )
             }
