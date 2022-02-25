@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
 import { Link } from "react-router-dom/cjs/react-router-dom.min"
+import { getEmployees } from "../ApiManager"
 
 export const EmployeeList = () => {
     const [employees, changeEmployee] = useState([])
@@ -10,10 +11,9 @@ export const EmployeeList = () => {
 
     useEffect(
         () => {
-            fetch("http://localhost:8088/employees")
-                .then(res => res.json())
-                .then((data) => {
-                    changeEmployee(data)
+            getEmployees()
+                .then((employees) => {
+                    changeEmployee(employees)
                 })
         },
         []
@@ -26,12 +26,12 @@ export const EmployeeList = () => {
             })
             changeSpecialties(specialtiesArray.join(", "))
 
-        /*
-            1. Use .map() to get the specialty of each employee
-            2. Then update a state variable to be a comma-separated string
-                (e.g. "iPhone, Printers, ...")
-        */
-    }, [employees])
+            /*
+                1. Use .map() to get the specialty of each employee
+                2. Then update a state variable to be a comma-separated string
+                    (e.g. "iPhone, Printers, ...")
+            */
+        }, [employees])
 
     return (
         <>
@@ -45,8 +45,8 @@ export const EmployeeList = () => {
                 employees.map(
                     (employee) => {
                         return <div key={`employee--${employee.id}`}>
-                                    <p><Link to={`./employees/${employee.id}`}>{employee.first_name} {employee.last_name}</Link></p>
-                                </div>
+                            <p><Link to={`./employees/${employee.id}`}>{employee.first_name} {employee.last_name}</Link></p>
+                        </div>
                     }
                 )
             }

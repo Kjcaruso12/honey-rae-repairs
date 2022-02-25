@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom/cjs/react-router-dom.min"
+import { getEmployee } from "../ApiManager"
 
 export const Employee = () => {
     const [employee, assignEmployee] = useState({})
@@ -9,10 +10,9 @@ export const Employee = () => {
 
     useEffect(
         () => {
-            return fetch(`http://localhost:8088/employees/${employeeId}`)
-            .then(res => res.json())
-            .then(assignEmployee)
-        },
+        getEmployee(employeeId)
+        .then(assignEmployee)
+    },
         [employeeId]
     )
 

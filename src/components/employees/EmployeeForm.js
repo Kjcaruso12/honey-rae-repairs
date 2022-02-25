@@ -1,23 +1,14 @@
 import React, { useState } from "react"
+import { postEmployee } from "../ApiManager";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export const EmployeeForm = () => {
     const [employees, update] = useState([]);
-
     const history = useHistory()
 
     const saveEmployee = (event) => {
         event.preventDefault()
-
-        const fetchOption = {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(employees)
-        }
-
-        return fetch("http://localhost:8088/employees", fetchOption)
+        postEmployee(employees)
         .then(() => {
             history.push("/employees")
         })
@@ -28,7 +19,7 @@ export const EmployeeForm = () => {
             <h2 className="employeeForm__title">New Employee</h2>
             <fieldset>
                 <div className="form-group">
-                    <label htmlFor="description">Name:</label>
+                    <label htmlFor="description">First Name:</label>
                     <input
                         required autoFocus
                         type="text"
@@ -37,7 +28,24 @@ export const EmployeeForm = () => {
                         onChange={
                             (evt) => {
                                 const copy = {...employees}
-                                copy.name = evt.target.value
+                                copy.first_name = evt.target.value
+                                update(copy)
+                            }
+                        } />
+                </div>
+            </fieldset>
+            <fieldset>
+                <div className="form-group">
+                    <label htmlFor="description">Last Name:</label>
+                    <input
+                        required autoFocus
+                        type="text"
+                        className="form-control"
+                        placeholder="Name of employee"
+                        onChange={
+                            (evt) => {
+                                const copy = {...employees}
+                                copy.last_name = evt.target.value
                                 update(copy)
                             }
                         } />

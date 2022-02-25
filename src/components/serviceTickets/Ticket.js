@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useParams, useHistory } from "react-router-dom"
+import { getEmployees, getTicket, postUpdatedTicket } from "../ApiManager"
 
 export const Ticket = () => {
     const [ticket, assignTicket] = useState({})  // State variable for current ticket object
@@ -11,21 +12,19 @@ export const Ticket = () => {
     // Fetch the individual ticket when the parameter value changes
     useEffect(
         () => {
-            return fetch(`http://localhost:8088/serviceTickets/${ticketId}?_expand=customer&_expand=employee`)
-                .then(response => response.json())
+            getTicket(ticketId)
                 .then((data) => {
                     assignTicket(data)
                 })
 
         },
-        [ ticketId ]  // Above function runs when the value of ticketId change
+        [ticketId]  // Above function runs when the value of ticketId change
     )
 
     // Fetch all employees
     useEffect(
         () => {
-            fetch(`http://localhost:8088/employees`)
-                .then(res => res.json())
+            getEmployees()
                 .then(syncEmployees)
         },
         []  // Empty dependency array only reacts to JSX initial rendering
@@ -44,15 +43,9 @@ export const Ticket = () => {
         }
 
         // Perform the PUT HTTP request to replace the resource
-        fetch(`http://localhost:8088/serviceTickets/${ticketId}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(updatedTicket)
-        })
+        postUpdatedTicket(ticketId, updatedTicket)
             .then(() => {
-                history.push("/tickets")
+                history.push("/serviceTickets")
             })
     }
 
@@ -63,8 +56,8 @@ export const Ticket = () => {
                 <div className="ticket__customer">Submitted by {ticket.customer?.first_name} {ticket.customer?.last_name}</div>
                 <div className="ticket__employee">Assigned to
                     <select
-                        value={ ticket.employeeId }
-                        onChange={ assignEmployee }>
+                        value={ticket.employeeId}
+                        onChange={assignEmployee}>
                         {
                             employees.map(employee => <option key={`employee--${employee.id}`} value={employee.id}>{employee.first_name} {employee.last_name}</option>)
                         }

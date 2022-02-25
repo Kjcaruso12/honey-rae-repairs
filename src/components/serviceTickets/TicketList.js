@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom/cjs/react-router-dom.min"
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min"
+import { getTickets, removeTicket } from "../ApiManager"
 import "./Tickets.css"
 
 export const TicketList = () => {
     const [tickets, updateTickets] = useState([])
     const history = useHistory()
     const deleteTicket = (id) => {
-        fetch(`http://localhost:8088/serviceTickets/${id}`, {
-            method: "DELETE"
-        })
+        removeTicket(id)
         const copy = tickets.filter(ticket => {
             return ticket.id != id
         })
         updateTickets(copy)
-        }      
+    }      
     
     useEffect(
         () => {
-            fetch("http://localhost:8088/serviceTickets?_expand=employee&_expand=customer")
-                .then(res => res.json())
-                .then((data) => {
-                    updateTickets(data)
+            getTickets()
+                .then((tickets) => {
+                    updateTickets(tickets)
                 })
         },
         []
